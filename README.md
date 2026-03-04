@@ -1,43 +1,59 @@
 # Graph Neural Network for Fraud Detection
 
-This project implements a **Graph Neural Network (GraphSAGE)** for detecting fraudulent Bitcoin transactions using the **Elliptic dataset**.
-
-## Problem
-
-Financial fraud often occurs in **transaction networks** where suspicious accounts interact with other suspicious accounts. Traditional machine learning models struggle to capture these relational patterns.
-
-Graph Neural Networks can leverage **graph structure and node features** to detect fraud more effectively.
+Graph Neural Network (GraphSAGE) model for detecting fraudulent Bitcoin transactions using the **Elliptic dataset**.
 
 ---
 
-## Dataset
+# Problem
+
+Financial fraud often occurs in **transaction networks** where suspicious accounts interact with other suspicious accounts.
+
+Traditional machine learning models treat transactions **independently**, missing relational patterns.
+
+Graph Neural Networks use **graph connectivity + node features** to detect fraud more effectively.
+
+---
+
+# Dataset
 
 Elliptic Bitcoin Transaction Dataset
 
-- Nodes: Transactions
-- Edges: Transaction flows
-- Features: 165 transaction features
-- Classes:
-  - 0 → Legitimate
-  - 1 → Illicit
+| Property | Value                   |
+| -------- | ----------------------- |
+| Nodes    | ~203k transactions      |
+| Edges    | ~234k transaction links |
+| Features | 165 features            |
+| Classes  | Legitimate / Illicit    |
+
+Class mapping:
+
+```
+0 → Legitimate  
+1 → Fraud
+```
 
 ---
 
-## Model
+# Model
 
 Graph Neural Network:
 
-- GraphSAGE
-- PyTorch Geometric
+* GraphSAGE
+* PyTorch Geometric
 
-Metrics achieved:
+Results:
 
-- ROC-AUC ≈ **0.96**
-- Fraud Recall ≈ **95%**
+| Metric       | Value |
+| ------------ | ----- |
+| ROC-AUC      | 0.96  |
+| Fraud Recall | ~95%  |
+| Accuracy     | ~83%  |
 
 ---
 
-## System Architecture
+# System Architecture
+
+```
 Elliptic Dataset
       │
       ▼
@@ -59,51 +75,89 @@ FastAPI Inference API
       │
       ▼
 Docker Container Deployment
-
+```
 
 ---
 
-## API Example
+# API Example
 
 Endpoint:
 
+```
 POST /predict
+```
 
 Example response:
 
+```json
 {
  "fraud_probability": 0.69,
  "threshold": 0.4,
  "prediction": "Fraud"
 }
-
----
-
-## Visualization
-
-The transaction network can be visualized using NetworkX to observe clusters of connected transactions.
-
----
-
-## Deployment
-
-Run using Docker:
-
-docker build -t elliptic-gnn-fraud .
-docker run -p 8000:8000 elliptic-gnn-fraud
+```
 
 Swagger UI:
 
+```
 http://localhost:8000/docs
+```
 
 ---
 
-## Technologies Used
+# Visualization
 
-- Python
-- PyTorch Geometric
-- GraphSAGE
-- FastAPI
-- Docker
-- NetworkX
-- Matplotlib
+The transaction network can be visualized using **NetworkX** to observe clusters of connected transactions.
+
+---
+
+# Deployment
+
+Build Docker image:
+
+```
+docker build -t elliptic-gnn-fraud .
+```
+
+Run container:
+
+```
+docker run -p 8000:8000 elliptic-gnn-fraud
+```
+
+API available at:
+
+```
+http://localhost:8000/docs
+```
+
+---
+
+# Project Structure
+
+```
+elliptic_gnn/
+│
+├── api.py
+├── train.py
+├── model.py
+├── utils.py
+├── baseline.py
+├── requirements.txt
+├── Dockerfile
+├── graphsage_model.pth
+└── data/
+```
+
+---
+
+# Technologies Used
+
+* Python
+* PyTorch
+* PyTorch Geometric
+* GraphSAGE
+* FastAPI
+* Docker
+* NetworkX
+* Matplotlib
